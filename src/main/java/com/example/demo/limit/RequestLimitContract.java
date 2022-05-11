@@ -70,6 +70,7 @@ public class RequestLimitContract {
             throw e;
         } catch (Exception e) {
             logger.error("发生异常", e);
+            throw e;
         }
     }
 }
