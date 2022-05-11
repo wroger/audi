@@ -41,13 +41,16 @@ public class AudiController {
         return map ;
     }
 
-    @RequestMapping("/wrong")
-    public int error(){
-        int i;
-            i = 9/0;
-
-        return i;
+    @RequestMapping(value = "/setpassword", method = RequestMethod.POST)
+    public Object SetPassword(@RequestBody Map<String, Object> map) {
+        return service.setpassword(map);
     }
+    
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Object Login(@RequestBody Map<String, Object> map) {
+        return service.login(map);
+    }
+
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public Object NewUser(@RequestBody Map<String, Object> map) {

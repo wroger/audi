@@ -10,6 +10,9 @@ package com.example.demo.user;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.comman.Md5;
+import com.example.demo.limit.LoginException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,5 +87,29 @@ public class UserService {
         int count = jdbcTemplate.update(deletesql, id);
         System.out.println(count);
         return count;
+    }
+
+    public Object setpassword(Map<String, Object> map) {
+        String name = map.get("name").toString();
+        String password = map.get("password").toString();
+        password=Md5.encryptToMD5(password);
+        String deletesql = "update users set password=? where name=?";
+        int count = jdbcTemplate.update(deletesql, password, name);
+        System.out.println(count);
+        return count;
+    }
+
+    public Map<String, Object> login(Map<String, Object> map) {
+
+        String name = map.get("name").toString();
+        String password = map.get("password").toString();
+        password = Md5.encryptToMD5(password);
+        String sql = "select name from users where name=? and password=?";
+        try {
+            Map<String, Object> newMap = jdbcTemplate.queryForMap(sql, name, password);
+            return newMap;
+        } catch (Exception e) {
+            throw new LoginException("无效的用户名或者密码！");
+        }
     }
 }
