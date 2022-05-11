@@ -5,7 +5,7 @@ package com.example.demo.limit;
  * @time：2022/05/10
  * @Discription：
  */
-public class RequestLimitException extends Exception {
+public class RequestLimitException extends RuntimeException  {
     private static final long serialVersionUID = 1364225358754654702L;
 
     public RequestLimitException(){

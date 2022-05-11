@@ -12,6 +12,8 @@ import com.example.demo.limit.RequestLimit;
 import com.example.demo.user.UserDao;
 import com.example.demo.user.UserService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,13 +30,23 @@ public class AudiController {
  
     @Autowired
     UserService service;
+    
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     @RequestMapping("/test")
     public Map<String,Object> test(){
         Map<String,Object> map=new HashMap<>();
         map.put("msg", "访问成功！");
         map.put("code", 0);
-        return map;
+        return map ;
+    }
+
+    @RequestMapping("/wrong")
+    public int error(){
+        int i;
+            i = 9/0;
+
+        return i;
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
@@ -60,7 +72,7 @@ public class AudiController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    @RequestLimit(count=120,time=60000)
+    @RequestLimit(count=10,time=60000)
     public Object interestedList(HttpServletRequest request,@RequestBody Map<String, Object> map) {
         String order = "";
         int page = 0;

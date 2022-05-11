@@ -1,6 +1,5 @@
 package com.example.demo.limit;
 
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -23,12 +22,13 @@ import java.util.TimerTask;
 @Component
 public class RequestLimitContract {
     private static final Logger logger = LoggerFactory.getLogger("requestLimitLogger");
-    private Map<String , Integer> redisTemplate = new HashMap<>();
-    
-    // @Before("within(@org.springframework.stereotype.Controller *) && @annotation(limit)")
-    //Before 在执行RestController之前执行该方法
+    private Map<String, Integer> redisTemplate = new HashMap<>();
+
+    // @Before("within(@org.springframework.stereotype.Controller *) &&
+    // @annotation(limit)")
+    // Before 在执行RestController之前执行该方法
     @Before("within(@org.springframework.web.bind.annotation.RestController *) && @annotation(limit)")
-    public void requestLimit(final JoinPoint joinPoint , RequestLimit limit) throws RequestLimitException {
+    public void requestLimit(final JoinPoint joinPoint, RequestLimit limit) throws RequestLimitException {
         try {
             Object[] args = joinPoint.getArgs();
             HttpServletRequest request = null;
@@ -51,7 +51,7 @@ public class RequestLimitContract {
             }
             int count = redisTemplate.get(key);
             if (count > 0) {
-                //创建一个定时器
+                // 创建一个定时器
                 Timer timer = new Timer();
                 TimerTask timerTask = new TimerTask() {
                     @Override
@@ -59,17 +59,17 @@ public class RequestLimitContract {
                         redisTemplate.remove(key);
                     }
                 };
-                //这个定时器设定在time规定的时间之后会执行上面的remove方法，也就是说在这个时间后它可以重新访问
+                // 这个定时器设定在time规定的时间之后会执行上面的remove方法，也就是说在这个时间后它可以重新访问
                 timer.schedule(timerTask, limit.time());
             }
             if (count > limit.count()) {
                 logger.info("用户IP[" + ip + "]访问地址[" + url + "]超过了限定的次数[" + limit.count() + "]");
                 throw new RequestLimitException();
             }
-        }catch (RequestLimitException e){
+        } catch (RequestLimitException e) {
             throw e;
-        }catch (Exception e){
-            logger.error("发生异常",e);
+        } catch (Exception e) {
+            logger.error("发生异常", e);
         }
     }
 }
