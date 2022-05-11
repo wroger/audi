@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/audi")
 public class AudiController {
  
-
     @Autowired
     UserService service;
 
@@ -53,7 +52,7 @@ public class AudiController {
 
     }
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public Object deleteInterested(@RequestBody Map<String, Object> map) {        
+    public Object deleteInterested(HttpServletRequest request,@RequestBody Map<String, Object> map) {        
         UserDao user=new UserDao();
         user.FromMap(map);
         return service.delete(user.getId());
@@ -61,8 +60,8 @@ public class AudiController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    @RequestLimit(count=10,time=60000)
-    public Object interestedList(@RequestBody Map<String, Object> map) {
+    @RequestLimit(count=120,time=60000)
+    public Object interestedList(HttpServletRequest request,@RequestBody Map<String, Object> map) {
         String order = "";
         int page = 0;
         int limit = 10;

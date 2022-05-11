@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 /**
  * @author wroger
- * @time：
+ * @time：2022/05/10
  * @Discription：
  */
 @Aspect
@@ -24,8 +24,10 @@ import java.util.TimerTask;
 public class RequestLimitContract {
     private static final Logger logger = LoggerFactory.getLogger("requestLimitLogger");
     private Map<String , Integer> redisTemplate = new HashMap<>();
-
-    @Before("within(@org.springframework.stereotype.Controller *) && @annotation(limit)")
+    
+    // @Before("within(@org.springframework.stereotype.Controller *) && @annotation(limit)")
+    //Before 在执行RestController之前执行该方法
+    @Before("within(@org.springframework.web.bind.annotation.RestController *) && @annotation(limit)")
     public void requestLimit(final JoinPoint joinPoint , RequestLimit limit) throws RequestLimitException {
         try {
             Object[] args = joinPoint.getArgs();

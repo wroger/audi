@@ -1,6 +1,12 @@
 
 package com.example.demo.user;
+/**
+ * @Author: wroger
+ * @time: 2022/05/10
+ * @Discription: 用户服务增删改查
+ */
 
+ 
 import java.util.List;
 import java.util.Map;
 
@@ -15,11 +21,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+    //注入JdbcTemplate
     @Autowired
     JdbcTemplate jdbcTemplate;
-    
+    //日志
     Logger logger = LoggerFactory.getLogger(getClass());
-
+    //获取ftp地址
     @Value("${ftp_ip}")
     private String ftpIp;
     
@@ -40,7 +47,7 @@ public class UserService {
             sql += " order by " + order;
         sql += " limit " + page * limit + "," + (page + 1) * limit;
 
-        logger.info("searcheAll SQL=" + sql);
+        logger.debug("searcheAll SQL=" + sql);
         
         BeanPropertyRowMapper<UserDao> rowMapper = new BeanPropertyRowMapper<>(UserDao.class);
         List<UserDao> userList = jdbcTemplate.query(sql, rowMapper);
@@ -54,6 +61,7 @@ public class UserService {
         List<UserDao> userList = jdbcTemplate.query(sql, rowMapper);
         return userList;
     }
+
     public int add(UserDao user) {
 
         String addsql = "insert into Interested(name,phone,interested) values(?,?,?)";

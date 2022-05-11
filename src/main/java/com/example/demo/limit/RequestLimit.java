@@ -7,8 +7,8 @@ import java.lang.annotation.*;
 
 /**
  * @Author:wroger
- * @time：
- * @Discription：
+ * @time：2022/05/10
+ * @Discription：定义访问频率限制
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
